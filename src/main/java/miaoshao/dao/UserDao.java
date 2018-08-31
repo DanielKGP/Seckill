@@ -9,10 +9,10 @@ import org.apache.ibatis.annotations.Param;
 @Mapper
 public interface UserDao {
 
-    @Select("select * from test where id = #{id}")
+    @Select("select * from user where id = #{id}")
     public User getByID(@Param("id")int id);
 
-    @Insert("insert into user(name)values(#{name})")
+    @Insert("insert into user(id, name)values(#{id}, #{name})")
     public int insert(User user);
 
 }

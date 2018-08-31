@@ -60,4 +60,11 @@ public class DemoController {
         return Result.success(user);
     }
 
+    @RequestMapping("/db/tx")
+    @ResponseBody
+    public Result<Boolean> dbTx() {
+        userService.tx();
+        return Result.success(true);
+    }
+
 }
