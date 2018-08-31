@@ -47,17 +47,17 @@ public class DemoController {
     }
 
     @RequestMapping("/test")
+    @ResponseBody
     public String test(){
+
         return "hello";
     }
 
     @RequestMapping("/db/get")
-    public Result<User> dbGet(){
+    @ResponseBody
+    public Result<User> dbGet() {
         User user = userService.getById(1);
         return Result.success(user);
     }
-
-
-
 
 }
