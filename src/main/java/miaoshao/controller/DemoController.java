@@ -1,6 +1,7 @@
 package miaoshao.controller;
 
 import miaoshao.domain.User;
+import miaoshao.redis.RedisService;
 import miaoshao.result.CodeMsg;
 import miaoshao.result.Result;
 
@@ -18,6 +19,11 @@ public class DemoController {
 
     @Autowired
     UserService userService;
+
+    @Autowired
+    RedisService redisService;
+
+
 
     @RequestMapping("/")
     @ResponseBody
@@ -65,6 +71,14 @@ public class DemoController {
     public Result<Boolean> dbTx() {
         userService.tx();
         return Result.success(true);
+    }
+
+    @RequestMapping("/redis/get")
+    @ResponseBody
+    public Result<Long> redisGet(){
+        Long v1 = redisService.get("key1", Long.class);
+        return Result.success(v1);
+
     }
 
 }
