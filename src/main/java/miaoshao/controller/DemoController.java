@@ -2,6 +2,7 @@ package miaoshao.controller;
 
 import miaoshao.domain.User;
 import miaoshao.redis.RedisService;
+import miaoshao.redis.UserKey;
 import miaoshao.result.CodeMsg;
 import miaoshao.result.Result;
 
@@ -12,6 +13,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import org.springframework.ui.Model;
+
+import javax.naming.spi.DirStateFactory;
 
 @Controller
 @RequestMapping("/demo")
@@ -75,10 +78,20 @@ public class DemoController {
 
     @RequestMapping("/redis/get")
     @ResponseBody
-    public Result<Long> redisGet(){
-        Long v1 = redisService.get("key1", Long.class);
-        return Result.success(v1);
+    public Result<User> redisGet(){
+        User user = redisService.get(UserKey.getById,""+1, User.class);
+        return Result.success(user);
 
+    }
+
+    @RequestMapping("/redis/set")
+    @ResponseBody
+    public Result<Boolean> resultSet(){
+        User user = new User();
+        user.setId(1);
+        user.setName("11111");
+        redisService.set(UserKey.getById,""+1,user);
+        return Result.success(true);
     }
 
 }
