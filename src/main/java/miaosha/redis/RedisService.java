@@ -37,11 +37,14 @@ public class RedisService {
                 return false;
             }
             String realKey = prefix.getPrefix()+key;
+            //miaosha user
+            System.out.println("realKey"+realKey);
             int seconds = prefix.expireSeconds();
+            System.out.println("expireSecond"+seconds);
             if(seconds<=0){
                 jedis.set(realKey,str);
             }else{
-                jedis.setex(key,seconds,str);
+                jedis.setex(realKey,seconds,str);
             }
             return true;
         }finally {

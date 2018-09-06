@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.thymeleaf.util.StringUtils;
 
+import javax.servlet.http.HttpServletResponse;
+
 @Controller
 @RequestMapping("/goods")
 public class GoodsController {
@@ -21,23 +23,10 @@ public class GoodsController {
     RedisService redisService;
 
     @RequestMapping("/to_list")
-    public String toLogin(Model model,
-                          @CookieValue(value=MiaoshaUserService.COOKI_NAME_TOKEN, required = false) String cookieToken,
-                          @RequestParam(value = MiaoshaUserService.COOKI_NAME_TOKEN,required = false) String paramToken){
-        //model.addAttribute("user", new MiaoshaUser());
-        if(StringUtils.isEmpty(cookieToken)&&StringUtils.isEmpty(paramToken)){
-            return "login";
-        }
-
-        String token = StringUtils.isEmpty(paramToken)?cookieToken:paramToken;
-        MiaoshaUser user = userService.getByToken(token);
+    public String toLogin(Model model, MiaoshaUser user){
 
         model.addAttribute("user",user);
-        System.out.println(user.getNickname());
-        return "goods_list";
-    }
-    @RequestMapping("/totest_list")
-    public String t(){
+        //System.out.println(user.getNickname());
         return "goods_list";
     }
 }

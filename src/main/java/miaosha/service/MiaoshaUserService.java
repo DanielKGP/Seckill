@@ -32,11 +32,19 @@ public class MiaoshaUserService {
         return miaoshaUserDao.getById(id);
     }
 
-    public MiaoshaUser getByToken(String token){
+    public MiaoshaUser getByToken(HttpServletResponse response, String token){
         if(StringUtils.isEmpty(token)){
             return null;
         }
-        return redisService.get(MiaoshaUserKey.token,token,MiaoshaUser.class);
+        //System.out.println(token);
+        MiaoshaUser user = redisService.get(MiaoshaUserKey.token,token,MiaoshaUser.class);
+        //System.out.println(user.getNickname());
+
+        if(user!=null){
+            addCookie(response,token,user);
+        }
+        return user;
+
     }
 
     public boolean login(HttpServletResponse response, LoginVo loginVo){
@@ -45,8 +53,11 @@ public class MiaoshaUserService {
         }
         String mobile = loginVo.getMobile();
         String formPass = loginVo.getPassword();
+        System.out.println(mobile+formPass);
+
         //judge if the user exist or not.
         MiaoshaUser user = getById(Long.parseLong(mobile));
+        System.out.println("id"+user.getNickname());
         if(user == null){
             throw new GlobalException(CodeMsg.MOBILE_NOT_EXIST);
         }
@@ -60,12 +71,24 @@ public class MiaoshaUserService {
 
         //generate cookie
         String token = UUIDUtil.uuid();
+        addCookie(response,token,user);
+        return true;
+
+    }
+
+    private void addCookie(HttpServletResponse response,String token, MiaoshaUser user){
+        System.out.println(MiaoshaUserKey.token);
+        System.out.println(token);
+        System.out.println(user.getNickname());
+
         redisService.set(MiaoshaUserKey.token, token, user);
+        MiaoshaUser u = redisService.get(MiaoshaUserKey.token, token,MiaoshaUser.class);
+        System.out.println(u.getNickname());
+
         Cookie cookie = new Cookie(COOKI_NAME_TOKEN, token);
         cookie.setMaxAge(MiaoshaUserKey.token.expireSeconds());
         cookie.setPath("/");
         response.addCookie(cookie);
-        return true;
     }
 }
 
