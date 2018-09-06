@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import miaosha.domain.MiaoshaUser;
+import org.thymeleaf.util.StringUtils;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
@@ -19,7 +20,7 @@ import javax.servlet.http.HttpServletResponse;
 @Service
 public class MiaoshaUserService {
 
-    private static final String COOKI_NAME_TOKEN = "token";
+    public static final String COOKI_NAME_TOKEN = "token";
 
     @Autowired
     MiaoshaUserDao miaoshaUserDao;
@@ -29,6 +30,13 @@ public class MiaoshaUserService {
 
     public MiaoshaUser getById(long id){
         return miaoshaUserDao.getById(id);
+    }
+
+    public MiaoshaUser getByToken(String token){
+        if(StringUtils.isEmpty(token)){
+            return null;
+        }
+        return redisService.get(MiaoshaUserKey.token,token,MiaoshaUser.class);
     }
 
     public boolean login(HttpServletResponse response, LoginVo loginVo){
