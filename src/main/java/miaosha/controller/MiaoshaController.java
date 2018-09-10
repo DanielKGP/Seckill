@@ -2,9 +2,11 @@ package miaosha.controller;
 
 import miaosha.domain.MiaoshaOrder;
 import miaosha.domain.MiaoshaUser;
+import miaosha.domain.OrderInfo;
 import miaosha.redis.RedisService;
 import miaosha.result.CodeMsg;
 import miaosha.service.GoodsService;
+import miaosha.service.MiaoshaService;
 import miaosha.service.MiaoshaUserService;
 import miaosha.service.OrderService;
 import miaosha.vo.GoodsVo;
@@ -18,7 +20,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import java.util.List;
 
 @Controller
-@RequestMapping("/goods")
+@RequestMapping("/miaosha")
 public class MiaoshaController {
     @Autowired
     MiaoshaUserService userService;
@@ -32,9 +34,12 @@ public class MiaoshaController {
     @Autowired
     OrderService orderService;
 
+    @Autowired
+    MiaoshaService miaoshaService;
+
     @RequestMapping("/do_miaosha")
     public String toLogin(Model model, MiaoshaUser user,
-                          @RequestParam("goodsId")long goodsId{
+                          @RequestParam("goodsId")long goodsId){
         model.addAttribute("user",user);
         if(user ==null){
             return "login";
